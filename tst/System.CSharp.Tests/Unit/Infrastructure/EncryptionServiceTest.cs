@@ -301,10 +301,14 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var message = "Hello world";
             var _secureStringService = new SecureStringService();
-            var (_, _, str) = _secureStringService.ToSecureString(message);
+            var (ok1, err1, str) = _secureStringService.ToSecureString(message);
+            Assert.True(ok1);
+            Assert.Null(err1);
             Assert.NotNull(str);
-            var (_, _, data) = (new EncryptionService(_secureStringService))
+            var (ok2, err2, data) = (new EncryptionService(_secureStringService))
                 .EncryptSecureString(str, _salt);
+            Assert.True(ok2);
+            Assert.Null(err2);
             Assert.NotNull(data);
             var secureStringService = Fake<ISecureStringService>();
             var error_ = _fixture.Create<Exception>();
