@@ -87,7 +87,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.FromBase64String("");
 
             Assert.False(success);
-            Assert.Equal("Unable to decode empty string", error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
@@ -99,7 +99,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.FromBase64String(_fixture.Create<string>());
 
             Assert.False(success);
-            Assert.Equal("The input is not a valid Base-64 string as it contains a non-base 64 character, more than two padding characters, or an illegal character among the padding characters.", error);
+            Assert.NotNull(error);
             Assert.Null(result);
         }
 

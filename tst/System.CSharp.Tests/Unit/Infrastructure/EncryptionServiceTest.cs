@@ -3,6 +3,7 @@ using FakeItEasy;
 using SFX.System.Infrastructure;
 using SFX.System.Model;
 using System;
+using System.Security;
 using System.Text;
 using Xunit;
 using static FakeItEasy.A;
@@ -83,7 +84,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.Encrypt(data, new Salt());
 
             Assert.False(success);
-            Assert.Equal("Salt is not valid", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
         #endregion
@@ -98,7 +99,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.Decrypt(null, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to decrypt null data", error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
@@ -111,7 +112,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.Decrypt(new byte[] { }, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to decrypt empty data", error);
+            Assert.NotNull(error);
             Assert.Null(result);
         }
 
@@ -126,7 +127,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.Decrypt(str_, new Salt());
 
             Assert.False(success);
-            Assert.Equal("Salt is not valid", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
         #endregion
@@ -141,7 +142,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.EncryptString(null, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to encrypt null string", error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
@@ -155,7 +156,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.EncryptString(message, new Salt());
 
             Assert.False(success);
-            Assert.Equal("Salt is not valid", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
         #endregion
@@ -170,7 +171,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.DecryptString(null, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to decrypt null data", error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
@@ -183,7 +184,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.DecryptString(new byte[] { }, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to decrypt empty data", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
 
@@ -198,7 +199,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.DecryptString(str_, new Salt());
 
             Assert.False(success);
-            Assert.Equal("Salt is not valid", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
         #endregion
@@ -213,7 +214,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.EncryptSecureString(null, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to encrypt null secure string", error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
@@ -228,7 +229,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.EncryptSecureString(str, new Salt());
 
             Assert.False(success);
-            Assert.Equal("Salt is not valid", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
 
@@ -239,15 +240,15 @@ namespace SFX.System.Test.Unit.Infrastructure
             var _secureStringService = new SecureStringService();
             var (_, _, str) = _secureStringService.ToSecureString(message);
             var secureStringService = Fake<ISecureStringService>();
-            var errorMessage = _fixture.Create<string>();
+            var error_ = _fixture.Create<Exception>();
             CallTo(() => secureStringService.ToInsecureString(str))
-                .Returns((false, errorMessage, default));
+                .Returns(new OperationResult<string>(error_, default));
             var sut = new EncryptionService(secureStringService);
 
             var (success, error, result) = sut.EncryptSecureString(str, _salt);
 
             Assert.False(success);
-            Assert.Equal($"Unable to encrypt secure string. Error: {errorMessage}", error);
+            Assert.Same(error_, error);
             Assert.Null(result);
         }
         #endregion
@@ -262,7 +263,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.DecryptSecureString(null, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to decrypt null data", error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
@@ -275,7 +276,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.DecryptSecureString(new byte[] { }, _salt);
 
             Assert.False(success);
-            Assert.Equal("Unable to decrypt empty data", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
 
@@ -291,7 +292,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.DecryptSecureString(str_, new Salt());
 
             Assert.False(success);
-            Assert.Equal("Salt is not valid", error);
+            Assert.IsAssignableFrom<ArgumentException>(error);
             Assert.Null(result);
         }
 
@@ -304,15 +305,15 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (_, _, data) = (new EncryptionService(_secureStringService))
                 .EncryptSecureString(str, _salt);
             var secureStringService = Fake<ISecureStringService>();
-            var error = _fixture.Create<Exception>();
+            var error_ = _fixture.Create<Exception>();
             CallTo(() => secureStringService.ToSecureString(message))
-                .Returns(new OperationResult<SecureString>(error, default));
+                .Returns(new OperationResult<SecureString>(error_, default));
             var sut = new EncryptionService(secureStringService);
 
             var (success, error, result) = sut.DecryptSecureString(data, _salt);
 
             Assert.False(success);
-            Assert.Equal($"Unable to decrypt to secure string. Error: {error}", error);
+            Assert.Same(error_, error);
             Assert.Null(result);
         }
         #endregion

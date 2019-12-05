@@ -20,7 +20,7 @@ namespace SFX.System.Infrastructure
         public T Value { get; }
 
         public void Deconstruct(out bool success, out Exception error, out T value) =>
-            (success, error, value) = (!(Error is null), Error, Value);
+            (success, error, value) = (Error is null, Error, Value);
 
         public static implicit operator T(OperationResult<T> x)
         {

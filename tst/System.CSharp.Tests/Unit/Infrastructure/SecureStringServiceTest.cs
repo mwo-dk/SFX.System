@@ -30,7 +30,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var (success, error, result) = sut.ToSecureString(null);
 
             Assert.False(success);
-            Assert.Equal(SecureStringService.Null_Invalid_String, error);
+            Assert.IsAssignableFrom<ArgumentNullException>(error);
             Assert.Null(result);
         }
 
