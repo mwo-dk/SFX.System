@@ -302,8 +302,10 @@ namespace SFX.System.Test.Unit.Infrastructure
             var message = "Hello world";
             var _secureStringService = new SecureStringService();
             var (_, _, str) = _secureStringService.ToSecureString(message);
+            Assert.NotNull(str);
             var (_, _, data) = (new EncryptionService(_secureStringService))
                 .EncryptSecureString(str, _salt);
+            Assert.NotNull(data);
             var secureStringService = Fake<ISecureStringService>();
             var error_ = _fixture.Create<Exception>();
             CallTo(() => secureStringService.ToSecureString(message))

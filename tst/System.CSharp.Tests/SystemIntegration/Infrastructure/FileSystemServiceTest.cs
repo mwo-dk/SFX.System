@@ -14,6 +14,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         #region Members
         private readonly Fixture _fixture;
         private static readonly string WorkingFolder = Path.Combine(Directory.GetCurrentDirectory(), "WorkingFolder");
+        
         private static FolderPath TestFolder { get; } = new FolderPath { Value = Path.Combine(Directory.GetCurrentDirectory(), @"WorkingFolder\TestFolder") };
         #endregion
 
