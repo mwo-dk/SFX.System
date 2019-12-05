@@ -6,6 +6,7 @@ using System;
 using System.Security;
 using System.Text;
 using Xunit;
+using Xunit.Abstractions;
 using static FakeItEasy.A;
 
 namespace SFX.System.Test.Unit.Infrastructure
@@ -16,15 +17,18 @@ namespace SFX.System.Test.Unit.Infrastructure
         #region Members
         private readonly Fixture _fixture;
         private readonly Salt _salt;
+        private readonly ITestOutputHelper _output;
         #endregion
 
         #region Test initialization
-        public EncryptionServiceTest()
+        public EncryptionServiceTest(ITestOutputHelper output)
         {
             _fixture = new Fixture();
 
             _salt = new Salt();
             _salt.SetStringValue("Salt is not a password");
+
+            _output = output;
         }
         #endregion
 
@@ -307,6 +311,8 @@ namespace SFX.System.Test.Unit.Infrastructure
             Assert.NotNull(str);
             var (ok2, err2, data) = (new EncryptionService(_secureStringService))
                 .EncryptSecureString(str, _salt);
+            _output.WriteLine("Result of encrypt. Ok: {0}. Error: {1}. Data: {2}",
+                ok2, err2, data);
             Assert.True(ok2);
             Assert.Null(err2);
             Assert.NotNull(data);
