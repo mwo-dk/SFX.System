@@ -62,13 +62,12 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         [Fact]
         public void CreateFolder_creates_new_empty_folder()
         {
-            var folderName = _fixture.Create<string>();
             var folder = GetRandomFolder();
             var sut = new FileSystemService();
 
             sut.CreateFolder(folder);
 
-            Assert.Contains(GetFolders(), folder_ => folder_ == folder.Value);
+            Assert.Contains(GetFolders(), folder_ => new FolderPath { Value = folder_ }.Equals(folder));
         }
         #endregion
 
