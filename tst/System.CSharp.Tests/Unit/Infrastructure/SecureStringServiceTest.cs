@@ -7,20 +7,6 @@ namespace SFX.System.Test.Unit.Infrastructure
     [Trait("Category", "Unit")]
     public class SecureStringServiceTest
     {
-        #region Type test
-        [Fact]
-        public void SecureStringService_implements_ISecureStringService()
-        {
-            Assert.True(typeof(ISecureStringService).IsAssignableFrom(typeof(SecureStringService)));
-        }
-
-        [Fact]
-        public void SecureStringService_is_sealed()
-        {
-            Assert.True(typeof(SecureStringService).IsSealed);
-        }
-        #endregion
-
         #region ToSecureString
         [Fact]
         public void ToSecureString_null_works()

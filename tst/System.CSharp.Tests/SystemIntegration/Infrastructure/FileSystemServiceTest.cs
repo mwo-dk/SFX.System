@@ -6,26 +6,26 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace SFX.System.Test.SystemIntegration.Infrastructure
 {
     [Trait("Category", "SystemIntegration")]
-    public class FileSystemServiceTests : IDisposable
+    public class FileSystemServiceTests
     {
         #region Members
         private readonly Fixture _fixture;
         private List<string> _folders = new List<string>();
         private List<string> _files = new List<string>();
+        private readonly ITestOutputHelper _output;
         private static readonly string WorkingFolder = Path.Combine(Directory.GetCurrentDirectory(), "WorkingFolder");
-        
-        private static FolderPath TestFolder { get; } = new FolderPath { Value = Path.Combine(Directory.GetCurrentDirectory(), @"WorkingFolder\TestFolder") };
         #endregion
 
         #region Test initialization
-        public FileSystemServiceTests()
+        public FileSystemServiceTests(ITestOutputHelper output)
         {
             _fixture = new Fixture().Customize(new SupportMutableValueTypesCustomization()) as Fixture;
-
+            _output = output;
             CreateWorkingFolder();
         }
         #endregion
@@ -66,6 +66,8 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             var sut = new FileSystemService();
 
             sut.CreateFolder(folder);
+            _output.WriteLine("Folder: {0}", folder.Value);
+            _output.WriteLine("Folders: {0}", string.Join(',', GetFolders()));
 
             Assert.Contains(GetFolders(), folder_ => new FolderPath { Value = folder_ }.Equals(folder));
         }

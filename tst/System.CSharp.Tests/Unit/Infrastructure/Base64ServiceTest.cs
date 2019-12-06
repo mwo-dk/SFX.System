@@ -26,20 +26,6 @@ namespace SFX.System.Test.Unit.Infrastructure
         }
         #endregion
 
-        #region Type test
-        [Fact]
-        public void Base64Service_implements_IBase64Service()
-        {
-            Assert.True(typeof(IBase64Service).IsAssignableFrom(typeof(Base64Service)));
-        }
-
-        [Fact]
-        public void Base64Service_is_sealed()
-        {
-            Assert.True(typeof(Base64Service).IsSealed);
-        }
-        #endregion
-
         #region ToBase64String
         [Fact]
         public void ToBase64String_of_null_data_works()
