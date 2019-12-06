@@ -29,6 +29,5 @@
 
   <ItemGroup>
     <PackageReference Include="SFX.Utils.CSharp" Version="1.0.7" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.7.0" />
   </ItemGroup>
 </Project>

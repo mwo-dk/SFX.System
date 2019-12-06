@@ -238,9 +238,20 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             RemoveFolder(WorkingFolder);
         }
 
-        private static string[] GetFolders() => Directory.GetDirectories(WorkingFolder);
-        private static void CreateFolder(string path) => Directory.CreateDirectory(path);
-        private static void RemoveFolder(string path) => Directory.Delete(path);
+        private static void DoSafe(Action action)
+        {
+            try
+            {
+                action();
+            }
+            catch { }
+        }
+        private static string[] GetFolders() =>
+            Directory.GetDirectories(WorkingFolder);
+        private static void CreateFolder(string path) =>
+            DoSafe(() => Directory.CreateDirectory(path));
+        private static void RemoveFolder(string path) =>
+            DoSafe(() => Directory.Delete(path));
         private static string[] GetFiles() => Directory.GetFiles(WorkingFolder);
 
         private static string ReadFile(string path)
