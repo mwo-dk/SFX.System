@@ -2,6 +2,7 @@
 using SFX.System.Infrastructure;
 using SFX.System.Model;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Xunit;
@@ -13,6 +14,8 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
     {
         #region Members
         private readonly Fixture _fixture;
+        private List<string> _folders = new List<string>();
+        private List<string> _files = new List<string>();
         private static readonly string WorkingFolder = Path.Combine(Directory.GetCurrentDirectory(), "WorkingFolder");
         
         private static FolderPath TestFolder { get; } = new FolderPath { Value = Path.Combine(Directory.GetCurrentDirectory(), @"WorkingFolder\TestFolder") };
@@ -33,7 +36,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         {
             var sut = new FileSystemService();
 
-            var (success, error, result) = sut.FolderExists(TestFolder);
+            var (success, error, result) = sut.FolderExists(GetRandomFolder());
 
             Assert.True(success);
             Assert.Null(error);
@@ -44,9 +47,10 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         public void If_test_folder_is_created_FolderExists_returns_false()
         {
             var sut = new FileSystemService();
-            CreateFolder(TestFolder.Value);
+            var folder = GetRandomFolder();
+            CreateFolder(folder.Value);
 
-            var (success, error, result) = sut.FolderExists(TestFolder);
+            var (success, error, result) = sut.FolderExists(folder);
 
             Assert.True(success);
             Assert.Null(error);
@@ -59,12 +63,12 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         public void CreateFolder_creates_new_empty_folder()
         {
             var folderName = _fixture.Create<string>();
-            var folderPath = new FolderPath { Value = Path.Combine(WorkingFolder, folderName) };
+            var folder = GetRandomFolder();
             var sut = new FileSystemService();
 
-            sut.CreateFolder(folderPath);
+            sut.CreateFolder(folder);
 
-            Assert.Contains(GetFolders(), folder => folder == folderPath.Value);
+            Assert.Contains(GetFolders(), folder_ => folder_ == folder.Value);
         }
         #endregion
 
@@ -72,13 +76,12 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         [Fact]
         public void ClearFolder_removes_existing_folders()
         {
-            var folderNames = _fixture.CreateMany<string>().ToArray();
-            var folderPaths =
-                folderNames.Select(folderName => new FolderPath { Value = Path.Combine(WorkingFolder, folderName) })
-                    .ToArray();
+            var folders = Enumerable.Range(0, 10)
+                .Select(_ => GetRandomFolder())
+                .ToArray();
             var sut = new FileSystemService();
-            foreach (var folderPath in folderPaths)
-                CreateFolder(folderPath.Value);
+            foreach (var folder in folders)
+                CreateFolder(folder.Value);
 
             sut.ClearFolder(new FolderPath { Value = WorkingFolder });
 
@@ -88,12 +91,11 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         [Fact]
         public void ClearFolder_removes_existing_files()
         {
-            var fileNames = _fixture.CreateMany<string>().ToArray();
-            var filePaths =
-                fileNames.Select(fileName => new FolderPath { Value = Path.Combine(WorkingFolder, fileName) })
-                    .ToArray();
+            var files = Enumerable.Range(0, 10)
+                .Select(_ => GetRandomFile())
+                .ToArray();
             var sut = new FileSystemService();
-            foreach (var filePath in filePaths)
+            foreach (var filePath in files)
                 CreateFile(filePath.Value, _fixture.Create<string>());
 
             sut.ClearFolder(new FolderPath { Value = WorkingFolder });
@@ -207,20 +209,32 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         #endregion
 
         #region Utility
+        private static string GetRandomName() => Guid.NewGuid().ToString("N").Substring(0, 8);
+        private FolderPath GetRandomFolder()
+        {
+            var name = GetRandomName();
+            var path = Path.Combine(Directory.GetCurrentDirectory(), $@"WorkingFolder\{name}");
+            _folders.Add(path);
+            return new FolderPath { Value = path };
+        }
+        private FilePath GetRandomFile()
+        {
+            var name = GetRandomName();
+            var path = Path.Combine(Directory.GetCurrentDirectory(), $@"WorkingFolder\{name}");
+            _files.Add(path);
+            return new FilePath { Value = path };
+        }
 
         private static void CreateWorkingFolder()
         {
             CreateFolder(WorkingFolder);
         }
-        private static void RemoveFilesAndFolders()
+        private void RemoveFilesAndFolders()
         {
-            foreach (var folder in GetFolders())
+            foreach (var folder in _folders)
                 RemoveFolder(folder);
-            foreach (var file in GetFiles())
+            foreach (var file in _files)
                 RemoveFile(file);
-        }
-        private static void RemoveWorkingFolder()
-        {
             RemoveFolder(WorkingFolder);
         }
 
@@ -255,7 +269,6 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         public void Dispose()
         {
             RemoveFilesAndFolders();
-            RemoveWorkingFolder();
         }
     }
 }
