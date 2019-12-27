@@ -2,7 +2,6 @@
 using FakeItEasy;
 using SFX.System.Infrastructure;
 using SFX.System.Model;
-using SFX.System.Windows.CSharp.Infrastructure.Encryption;
 using System;
 using System.Security;
 using System.Text;

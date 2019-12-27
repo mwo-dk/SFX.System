@@ -1,12 +1,11 @@
 ﻿using SFX.ROP.CSharp;
-using SFX.System.Windows.CSharp.Infrastructure.Registry;
 using SFX.System.Windows.CSharp.Model.Product;
 using SFX.System.Windows.CSharp.Model.Registry;
 using System;
-using static System.Threading.Interlocked;
 using static SFX.ROP.CSharp.Library;
+using static System.Threading.Interlocked;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Product
+namespace SFX.System.Infrastructure
 {
     /// <summary>
     /// Implements <see cref="IProductIdReader"/>
@@ -63,7 +62,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Product
                 throw new InvalidOperationException("ProductReader is not initialized");
 
             var (success, error, result) = RegistryReader
-                .ReadSLocalMachineStringValue(Path, ProductIdKeyName);
+                .ReadLocalMachineStringValue(Path, ProductIdKeyName);
 
             return success ?
                 Succeed(new ProductId { Value = result.Value }) :

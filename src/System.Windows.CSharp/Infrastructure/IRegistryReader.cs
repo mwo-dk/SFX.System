@@ -1,7 +1,7 @@
 ﻿using SFX.ROP.CSharp;
 using SFX.System.Windows.CSharp.Model.Registry;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Registry
+namespace SFX.System.Infrastructure
 {
     /// <summary>
     /// Interface describing the capability of queriying registry keys
