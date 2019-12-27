@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <AssemblyName>SFX.System.Windows</AssemblyName>
+
+    <RootNamespace>SFX.System.Windows</RootNamespace>
+    <PackageId>SFX.System.Windows</PackageId>
+    <Version>$(Version)</Version>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <IsPackable>true</IsPackable>
+
+    <RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers>
+    
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Authors>Michael W. Olesen</Authors>
+    <Company>-</Company>
+    <Description>A small library for working various system services in F#</Description>
+    <Copyright>Michael W. Olesen</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/mwo-dk/SFX.System.Windows</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mwo-dk/SFX.System.Windows</RepositoryUrl>
+    <PackageIcon>dingir.png</PackageIcon>
+    <PackageTags>system F#</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Library.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="dingir.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SFX.ROP" Version="1.0.15" />
+  </ItemGroup>
+
+</Project>
