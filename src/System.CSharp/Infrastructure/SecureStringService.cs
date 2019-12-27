@@ -1,6 +1,8 @@
-﻿using System;
+﻿using SFX.ROP.CSharp;
+using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using static SFX.ROP.CSharp.Library;
 
 namespace SFX.System.Infrastructure
 {
@@ -10,10 +12,10 @@ namespace SFX.System.Infrastructure
     public sealed class SecureStringService : ISecureStringService
     {
         /// <inheritdoc/>
-        public OperationResult<SecureString> ToSecureString(string input)
+        public Result<SecureString> ToSecureString(string input)
         {
             if (input is null)
-                return new OperationResult<SecureString>(new ArgumentNullException(nameof(input)), default);
+                return Fail<SecureString>(new ArgumentNullException(nameof(input)));
 
             try
             {
@@ -23,19 +25,19 @@ namespace SFX.System.Infrastructure
                     secure.AppendChar(c);
                 }
                 secure.MakeReadOnly();
-                return new OperationResult<SecureString>(default, secure);
+                return Succeed(secure);
             }
             catch (Exception error)
             {
-                return new OperationResult<SecureString>(error, default);
+                return Fail<SecureString>(error);
             }
         }
 
         /// <inheritdoc/>
-        public OperationResult<string> ToInsecureString(SecureString input)
+        public Result<string> ToInsecureString(SecureString input)
         {
             if (input is null)
-                return new OperationResult<string>(new ArgumentNullException(nameof(input)), default);
+                return Fail<string>(new ArgumentNullException(nameof(input)));
 
             IntPtr ptr = default;
             string result = default;
@@ -65,7 +67,9 @@ namespace SFX.System.Infrastructure
                     }
             }
 
-            return new OperationResult<string>(error, errorOccurred ? default : result);
+            return errorOccurred ?
+                Fail<string>(error) :
+                Succeed(result);
         }
     }
 }

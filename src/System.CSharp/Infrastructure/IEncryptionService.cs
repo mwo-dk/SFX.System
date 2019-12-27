@@ -1,4 +1,5 @@
-﻿using SFX.System.Model;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
 using System.Security;
 
 namespace SFX.System.Infrastructure
@@ -14,7 +15,7 @@ namespace SFX.System.Infrastructure
         /// <param name="input">The binary data to encrypt</param>
         /// <param name="salt">The <see cref="Salt"/></param>
         /// <returns>Entrypted version of <paramref name="input"/></returns>
-        OperationResult<byte[]> Encrypt(byte[] input, Salt salt);
+        Result<byte[]> Encrypt(byte[] input, Salt salt);
 
         /// <summary>
         /// Encrypts a string
@@ -22,7 +23,7 @@ namespace SFX.System.Infrastructure
         /// <param name="input">The <see cref="string"/> to encrypt</param>
         /// <param name="salt">The <see cref="Salt"/></param>
         /// <returns>Entrypted version of <paramref name="input"/></returns>
-        OperationResult<byte[]> EncryptString(string input, Salt salt);
+        Result<byte[]> EncryptString(string input, Salt salt);
 
         /// <summary>
         /// Encrypts a secure string
@@ -30,7 +31,7 @@ namespace SFX.System.Infrastructure
         /// <param name="input">The <see cref="SecureString"/> to encrypt</param>
         /// <param name="salt">The <see cref="Salt"/></param>
         /// <returns>Entrypted version of <paramref name="input"/></returns>
-        OperationResult<byte[]> EncryptSecureString(SecureString input, Salt salt);
+        Result<byte[]> EncryptSecureString(SecureString input, Salt salt);
 
         /// <summary>
         /// Decrypts binary data.
@@ -38,7 +39,7 @@ namespace SFX.System.Infrastructure
         /// <param name="encryptedData">The <see cref="byte[]"/> to decrypt</param>
         /// <param name="salt">The <see cref="Salt"/></param>
         /// <returns>Decrypted version of <paramref name="encryptedData"/></returns>
-        OperationResult<byte[]> Decrypt(byte[] encryptedData, Salt salt);
+        Result<byte[]> Decrypt(byte[] encryptedData, Salt salt);
 
         /// <summary>
         /// Decrypts a string.
@@ -46,7 +47,7 @@ namespace SFX.System.Infrastructure
         /// <param name="encryptedData">The <see cref="byte[]"/> to decrypt</param>
         /// <param name="salt">The <see cref="Salt"/></param>
         /// <returns>Decrypted version of <paramref name="encryptedData"/></returns>
-        OperationResult<string> DecryptString(byte[] encryptedData, Salt salt);
+        Result<string> DecryptString(byte[] encryptedData, Salt salt);
 
         /// <summary>
         /// Decrypts a string.
@@ -54,6 +55,6 @@ namespace SFX.System.Infrastructure
         /// <param name="encryptedData">The <see cref="byte[]"/> to decrypt</param>
         /// <param name="salt">The <see cref="Salt"/></param>
         /// <returns>Decrypted version of <paramref name="encryptedData"/></returns>
-        OperationResult<SecureString> DecryptSecureString(byte[] encryptedData, Salt salt);
+        Result<SecureString> DecryptSecureString(byte[] encryptedData, Salt salt);
     }
 }

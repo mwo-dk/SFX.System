@@ -1,9 +1,11 @@
-﻿using SFX.System.Model;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static SFX.ROP.CSharp.Library;
 
 namespace SFX.System.Infrastructure
 {
@@ -13,35 +15,35 @@ namespace SFX.System.Infrastructure
     public sealed class FileSystemService : IFileSystemService
     {
         /// <inheritdoc/>
-        public (bool Success, string Error, bool Result) FolderExists(FolderPath folderPath)
+        public Result<bool> FolderExists(FolderPath folderPath)
         {
             try
             {
-                return (true, default, Directory.Exists(folderPath.Value));
+                return Succeed(Directory.Exists(folderPath.Value));
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, false);
+                return Fail<bool>(exn);
             }
         }
 
 
         /// <inheritdoc/>
-        public (bool Success, string Error) CreateFolder(FolderPath folderPath)
+        public Result<Unit> CreateFolder(FolderPath folderPath)
         {
             try
             {
                 Directory.CreateDirectory(folderPath.Value);
-                return (true, default);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error) ClearFolder(FolderPath folderPath)
+        public Result<Unit> ClearFolder(FolderPath folderPath)
         {
             try
             {
@@ -49,138 +51,138 @@ namespace SFX.System.Infrastructure
                     Directory.Delete(folder, true);
                 foreach (var file in Directory.GetFiles(folderPath.Value))
                     File.Delete(file);
-                return (true, default);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error, bool Result) FileExists(FilePath filePath)
+        public Result<bool> FileExists(FilePath filePath)
         {
             try
             {
-                return (true, default, File.Exists(filePath.Value));
+                return Succeed(File.Exists(filePath.Value));
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, false);
+                return Fail<bool>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error, IEnumerable<FilePath> Result) GetFiles(FolderPath folderPath)
+        public Result<IEnumerable<FilePath>> GetFiles(FolderPath folderPath)
         {
             try
             {
                 var result = Directory.GetFiles(folderPath.Value)
                     .Select(filePath => new FilePath { Value = filePath });
-                return (true, default, result);
+                return Succeed(result);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, default);
+                return Fail<IEnumerable<FilePath>>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error) CreateFile(FilePath filePath, byte[] content)
+        public Result<Unit> CreateFile(FilePath filePath, byte[] content)
         {
             if (content is null || content.Length == 0)
-                return (false, "No content provided");
+                return Fail<Unit>(new ArgumentNullException(nameof(content)));
 
             try
             {
-                using (var stream = File.Create(filePath.Value))
-                    stream.Write(content, 0, content.Length);
-                return (true, default);
+                using var stream = File.Create(filePath.Value);
+                stream.Write(content, 0, content.Length);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error) CreateFile(FilePath filePath, string content)
+        public Result<Unit> CreateFile(FilePath filePath, string content)
         {
             if (string.IsNullOrEmpty(content))
-                return (false, "No content provided");
+                return Fail<Unit>(new ArgumentNullException(nameof(content)));
 
             try
             {
-                using (var stream = File.CreateText(filePath.Value))
-                    stream.Write(content);
-                return (true, default);
+                using var stream = File.CreateText(filePath.Value);
+                stream.Write(content);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public async Task<(bool Success, string Error)> CreateFileAsync(FilePath filePath, byte[] content)
+        public async Task<Result<Unit>> CreateFileAsync(FilePath filePath, byte[] content)
         {
             if (content is null || content.Length == 0)
-                return (false, "No content provided");
+                return Fail<Unit>(new ArgumentNullException(nameof(content)));
 
             try
             {
-                using (var stream = File.Create(filePath.Value))
-                    await stream.WriteAsync(content, 0, content.Length).ConfigureAwait(false);
-                return (true, default);
+                using var stream = File.Create(filePath.Value);
+                await stream.WriteAsync(content, 0, content.Length);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public async Task<(bool Success, string Error)> CreateFileAsync(FilePath filePath, string content)
+        public async Task<Result<Unit>> CreateFileAsync(FilePath filePath, string content)
         {
             if (string.IsNullOrEmpty(content))
-                return (false, "No content provided");
+                return Fail<Unit>(new ArgumentNullException(nameof(content)));
 
             try
             {
-                using (var stream = File.CreateText(filePath.Value))
-                    await stream.WriteAsync(content).ConfigureAwait(false);
-                return (true, default);
+                using var stream = File.CreateText(filePath.Value);
+                await stream.WriteAsync(content);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error) DeleteFile(FilePath filePath)
+        public Result<Unit> DeleteFile(FilePath filePath)
         {
             try
             {
                 if (!File.Exists(filePath.Value))
-                    return (false, $"File \"{filePath}\" not found");
+                    return Fail<Unit>(new FileNotFoundException());
                 File.Delete(filePath.Value);
-                return (true, default);
+                return Succeed(Unit.Value);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message);
+                return Fail<Unit>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error, byte[] Result) ReadFileBinaryContent(FilePath filePath)
+        public Result<byte[]> ReadFileBinaryContent(FilePath filePath)
         {
             var (success, error, result) = FileExists(filePath);
             if (!success)
-                return (false, error, default);
+                return Fail<byte[]>(error);
             if (!result)
-                return (false, $"File \"{filePath}\" not found", default);
+                return Fail<byte[]>(new FileNotFoundException());
 
             try
             {
@@ -191,57 +193,51 @@ namespace SFX.System.Infrastructure
                 var bufferSize = Int32.MaxValue < size ? (1 << 20) : ((int)size);
                 byte[] buffer = new byte[bufferSize];
 
-                using (var file = File.OpenRead(filePath.Value))
+                using var file = File.OpenRead(filePath.Value);
+                while (count < size)
                 {
-                    while (count < size)
-                    {
-                        var n = file.Read(buffer, 0, bufferSize);
-                        Array.Copy(buffer, 0, data, count, n);
-                        count += n;
-                    }
-
-                    return (true, default, data);
+                    var n = file.Read(buffer, 0, bufferSize);
+                    Array.Copy(buffer, 0, data, count, n);
+                    count += n;
                 }
+
+                return Succeed(data);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, default);
+                return Fail<byte[]>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public (bool Success, string Error, string Result) ReadFileStringContent(FilePath filePath)
+        public Result<string> ReadFileStringContent(FilePath filePath)
         {
             var (success, error, result) = FileExists(filePath);
             if (!success)
-                return (false, error, default);
+                return Fail<string>(error);
             if (!result)
-                return (false, $"File \"{filePath}\" not found", default);
+                return Fail<string>(new FileNotFoundException());
 
             try
             {
-                using (var file = File.OpenRead(filePath.Value))
-                {
-                    using (var streamReader = new StreamReader(file))
-                    {
-                        return (true, default, streamReader.ReadToEnd());
-                    }
-                }
+                using var file = File.OpenRead(filePath.Value);
+                using var streamReader = new StreamReader(file);
+                return Succeed(streamReader.ReadToEnd());
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, default);
+                return Fail<string>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public async Task<(bool Success, string Error, byte[] Result)> ReadFileBinaryContentAsync(FilePath filePath)
+        public async Task<Result<byte[]>> ReadFileBinaryContentAsync(FilePath filePath)
         {
             var (success, error, result) = FileExists(filePath);
             if (!success)
-                return (false, error, default);
+                return Fail<byte[]>(error);
             if (!result)
-                return (false, $"File \"{filePath}\" not found", default);
+                return Fail<byte[]>(new FileNotFoundException());
 
             try
             {
@@ -252,48 +248,40 @@ namespace SFX.System.Infrastructure
                 var bufferSize = Int32.MaxValue < size ? (1 << 20) : ((int)size);
                 byte[] buffer = new byte[bufferSize];
 
-                using (var file = File.OpenRead(filePath.Value))
+                using var file = File.OpenRead(filePath.Value);
+                while (count < size)
                 {
-                    while (count < size)
-                    {
-                        var n = await file.ReadAsync(buffer, 0, bufferSize)
-                            .ConfigureAwait(false);
-                        Array.Copy(buffer, 0, data, count, n);
-                        count += n;
-                    }
-
-                    return (true, default, data);
+                    var n = await file.ReadAsync(buffer, 0, bufferSize);
+                    Array.Copy(buffer, 0, data, count, n);
+                    count += n;
                 }
+
+                return Succeed(data);
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, default);
+                return Fail<byte[]>(exn);
             }
         }
 
         /// <inheritdoc/>
-        public async Task<(bool Success, string Error, string Result)> ReadFileStringContentAsync(FilePath filePath)
+        public async Task<Result<string>> ReadFileStringContentAsync(FilePath filePath)
         {
             var (success, error, result) = FileExists(filePath);
             if (!success)
-                return (false, error, default);
+                return Fail<string>(error);
             if (!result)
-                return (false, $"File \"{filePath}\" not found", default);
+                return Fail<string>(new FileNotFoundException());
 
             try
             {
-                using (var file = File.OpenRead(filePath.Value))
-                {
-                    using (var streamReader = new StreamReader(file))
-                    {
-                        return (true, default, await streamReader.ReadToEndAsync()
-                            .ConfigureAwait(false));
-                    }
-                }
+                using var file = File.OpenRead(filePath.Value);
+                using var streamReader = new StreamReader(file);
+                return Succeed(await streamReader.ReadToEndAsync());
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, default);
+                return Fail<string>(exn);
             }
         }
     }

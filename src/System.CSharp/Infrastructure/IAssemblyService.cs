@@ -1,4 +1,5 @@
-﻿using SFX.System.Model;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
 
 namespace SFX.System.Infrastructure
 {
@@ -11,6 +12,6 @@ namespace SFX.System.Infrastructure
         /// Returns the full path to a running exe file
         /// </summary>
         /// <returns>The path to a running exe</returns>
-        OperationResult<FilePath> GetExeFilePath();
+        Result<FilePath> GetExeFilePath();
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using SFX.ROP.CSharp;
+using System.Security;
 
 namespace SFX.System.Infrastructure
 {
@@ -12,13 +13,13 @@ namespace SFX.System.Infrastructure
         /// </summary>
         /// <param name="input">The <see cref="string"/> that needs to be converted</param>
         /// <returns><paramref name="input"/> as a <see cref="SecureString"/></returns>
-        OperationResult<SecureString> ToSecureString(string input);
+        Result<SecureString> ToSecureString(string input);
 
         /// <summary>
         /// Converts <paramref name="input"/> to a <see cref="string"/>
         /// </summary>
         /// <param name="input">The <see cref="SecureString"/> that needs to be converted</param>
         /// <returns><paramref name="input"/> as a <see cref="string"/></returns>
-        OperationResult<string> ToInsecureString(SecureString input);
+        Result<string> ToInsecureString(SecureString input);
     }
 }

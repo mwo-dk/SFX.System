@@ -1,5 +1,4 @@
 ﻿using SFX.System.Model;
-using System;
 using Xunit;
 
 namespace SFX.System.Test.Unit.Model

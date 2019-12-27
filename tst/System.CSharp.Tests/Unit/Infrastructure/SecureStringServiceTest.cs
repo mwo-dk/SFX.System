@@ -1,5 +1,5 @@
-﻿using System;
-using SFX.System.Infrastructure;
+﻿using SFX.System.Infrastructure;
+using System;
 using Xunit;
 
 namespace SFX.System.Test.Unit.Infrastructure

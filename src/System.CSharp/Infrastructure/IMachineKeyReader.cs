@@ -1,4 +1,5 @@
-﻿using SFX.System.Model;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
 
 namespace SFX.System.Infrastructure
 {
@@ -11,6 +12,6 @@ namespace SFX.System.Infrastructure
         /// Reads a uniqu machine id
         /// </summary>
         /// <returns>The machine key</returns>
-        (bool Success, string Error, MachineKey Result) GetMachineKey();
+        Result<MachineKey> GetMachineKey();
     }
 }

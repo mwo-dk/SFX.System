@@ -12,23 +12,22 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.0.100
+        dotnet-version: 3.1.100
     - name: Build 
       run: dotnet build --configuration Release
-    - name: Test C#
-      run: dotnet test ./tst/System.CSharp.Tests/System.CSharp.Tests.csproj
-    - name: Test F#
-      run: dotnet test ./tst/System.Tests/System.Tests.fsproj
-    - name: Build C# NuGet Package
-      run: 
+    - name: Test
+      run: |
+        dotnet test ./tst/System.CSharp.Tests/System.CSharp.Tests.csproj
+        dotnet test ./tst/System.Tests/System.Tests.fsproj
+    - name: Build C# NuGet Packages
+      run: |
         dotnet pack ./src/System.CSharp/System.CSharp.csproj --configuration Release -o ./nuget
-    - name: Build F# Nuget Package
-      run:
+    - name: Build F# Nuget Packages
+      run: |
         dotnet pack ./src/System/System.fsproj --configuration Release -o ./nuget
-    - name: Deploy NuGet C# Package
-      run:
+    - name: Deploy NuGet C# Packages
+      run: |
         dotnet nuget push /home/runner/work/SFX.System/SFX.System/nuget/SFX.System.CSharp.*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
-    - name: Deploy NuGet F# Package
-      run:
+    - name: Deploy NuGet F# Packages
+      run: |
         dotnet nuget push /home/runner/work/SFX.System/SFX.System/nuget/SFX.System.*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NUGET_API_KEY }}
-

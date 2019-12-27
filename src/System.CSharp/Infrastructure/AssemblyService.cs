@@ -1,7 +1,9 @@
-﻿using SFX.System.Model;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
 using System;
 using System.IO;
 using System.Reflection;
+using static SFX.ROP.CSharp.Library;
 
 namespace SFX.System.Infrastructure
 {
@@ -11,7 +13,7 @@ namespace SFX.System.Infrastructure
     public sealed class AssemblyService : IAssemblyService
     {
         /// <inheritdoc/>
-        public OperationResult<FilePath> GetExeFilePath()
+        public Result<FilePath> GetExeFilePath()
         {
             try
             {
@@ -19,11 +21,11 @@ namespace SFX.System.Infrastructure
                 var codebase = entry.CodeBase;
                 var path = new Uri(codebase).AbsolutePath;
                 var cleanPath = Uri.UnescapeDataString(path);
-                return new OperationResult<FilePath>(default, new FilePath { Value = Path.GetFullPath(cleanPath) });
+                return Succeed(new FilePath { Value = Path.GetFullPath(cleanPath) });
             }
             catch (Exception error)
             {
-                return new OperationResult<FilePath>(error, default);
+                return Fail<FilePath>(error);
             }
         }
     }

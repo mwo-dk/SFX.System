@@ -2,23 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyName>SFX.System</AssemblyName>
-    <RootNamespace>SFX.System.CSharp</RootNamespace>
+    <AssemblyName>SFX.System.Windows</AssemblyName>
+    <RootNamespace>SFX.System.Windows.CSharp</RootNamespace>
 
-    <PackageId>SFX.System.CSharp</PackageId>
+    <PackageId>SFX.System.Windows.CSharp</PackageId>
     <Version>$(Version)</Version>
     <FileVersion>$(Version)</FileVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <IsPackable>true</IsPackable>
 
+    <RuntimeIdentifiers>win-x86;win-x64</RuntimeIdentifiers>
+    
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Authors>Michael W. Olesen</Authors>
     <Company>-</Company>
     <Description>A small library for working with bit-arrays based on 64 bit signed integers</Description>
     <Copyright>Michael W. Olesen</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/mwo-dk/SFX.System</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/mwo-dk/SFX.System</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/mwo-dk/SFX.System.Windows</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/mwo-dk/SFX.System.Windows</RepositoryUrl>
     <PackageIcon>dingir.png</PackageIcon>
     <PackageTags>bit array</PackageTags>
   </PropertyGroup>
@@ -28,7 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SFX.ROP.CSharp" Version="1.0.15" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="4.7.0" />
     <PackageReference Include="SFX.Utils.CSharp" Version="1.0.11" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\System.CSharp\System.CSharp.csproj" />
+  </ItemGroup>
+
 </Project>

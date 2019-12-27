@@ -186,7 +186,10 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             sut.CreateFile(new FilePath { Value = fileName }, fileContent);
             sut.DeleteFile(new FilePath { Value = fileName });
 
-            Assert.False(sut.FileExists(new FilePath { Value = fileName }).Result);
+            var (ok, error, result) = sut.FileExists(new FilePath { Value = fileName });
+            Assert.True(ok);
+            Assert.Null(error);
+            Assert.False(result);
         }
         #endregion
 
