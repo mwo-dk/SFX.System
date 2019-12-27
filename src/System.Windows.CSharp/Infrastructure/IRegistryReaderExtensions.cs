@@ -3,7 +3,7 @@ using SFX.System.Windows.CSharp.Model.Registry;
 using System;
 using static SFX.System.Windows.CSharp.Model.Registry.RegistryRootKeys;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Registry
+namespace SFX.System.Infrastructure
 {
     /// <summary>
     /// Extension methods for <see cref="IRegistryReader"/>
@@ -20,7 +20,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Registry
         /// <param name="name">The <see cref="RegistryKeyName"/> of the key to be read</param>
         /// <returns>The result of the query</returns>
         public static Result<RegistryStringValue>
-            ReadSClassesRootStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
+            ReadClassesRootStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
             reader.Safe().ReadStringValue(ClassesRoot, path, name);
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Registry
         /// <param name="name">The <see cref="RegistryKeyName"/> of the key to be read</param>
         /// <returns>The result of the query</returns>
         public static Result<RegistryStringValue>
-            ReadSCurrentConfigStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
+            ReadCurrentConfigStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
             reader.Safe().ReadStringValue(CurrentConfig, path, name);
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Registry
         /// <param name="name">The <see cref="RegistryKeyName"/> of the key to be read</param>
         /// <returns>The result of the query</returns>
         public static Result<RegistryStringValue>
-            ReadSCurrentUserStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
+            ReadCurrentUserStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
             reader.Safe().ReadStringValue(CurrentUser, path, name);
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Registry
         /// <param name="name">The <see cref="RegistryKeyName"/> of the key to be read</param>
         /// <returns>The result of the query</returns>
         public static Result<RegistryStringValue>
-            ReadSLocalMachineStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
+            ReadLocalMachineStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
             reader.Safe().ReadStringValue(LocalMachine, path, name);
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Registry
         /// <param name="name">The <see cref="RegistryKeyName"/> of the key to be read</param>
         /// <returns>The result of the query</returns>
         public static Result<RegistryStringValue>
-            ReadSPerformanceDataStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
+            ReadPerformanceDataStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
             reader.Safe().ReadStringValue(PerformanceData, path, name);
 
         /// <summary>
@@ -150,7 +150,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Registry
         /// <param name="name">The <see cref="RegistryKeyName"/> of the key to be read</param>
         /// <returns>The result of the query</returns>
         public static Result<RegistryStringValue>
-            ReadSUsersStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
+            ReadUsersStringValue(this IRegistryReader reader, RegistrySubPath path, RegistryKeyName name) =>
             reader.Safe().ReadStringValue(Users, path, name);
 
         /// <summary>

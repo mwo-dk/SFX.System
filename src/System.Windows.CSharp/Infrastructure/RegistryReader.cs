@@ -4,7 +4,7 @@ using SFX.System.Windows.CSharp.Model.Registry;
 using System;
 using static SFX.ROP.CSharp.Library;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Registry
+namespace SFX.System.Infrastructure
 {
     public sealed class RegistryReader : IRegistryReader
     {

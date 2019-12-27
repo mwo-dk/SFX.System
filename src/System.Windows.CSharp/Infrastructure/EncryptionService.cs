@@ -1,15 +1,13 @@
-﻿using SFX.System.Model;
-using SFX.ROP;
-using static SFX.ROP.CSharp.Library;
-using SFX.System.Infrastructure;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
 using System;
-using SFX.ROP.CSharp;
-using System.Text;
 using System.Security;
+using System.Text;
+using static SFX.ROP.CSharp.Library;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Encryption
+namespace SFX.System.Infrastructure
 {
-    
+
     /// <summary>
     /// Implementation of <see cref="IEncryptionService"/>
     /// </summary>

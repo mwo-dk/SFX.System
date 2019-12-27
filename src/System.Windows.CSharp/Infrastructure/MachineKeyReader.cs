@@ -1,10 +1,10 @@
-﻿//using SFX.System.Infrastructure;
-//using SFX.System.Model;
-//using System;
+﻿using SFX.ROP.CSharp;
+using SFX.System.Model;
+using System;
+using static SFX.ROP.CSharp.Library;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Machine
+namespace SFX.System.Infrastructure
 {
-    /*
     /// <summary>
     /// Implements <see cref="IMachineKeyReader"/>
     /// </summary>
@@ -19,22 +19,22 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Machine
 
         internal IMachineGuidReader MachineGuidReader { get; }
 
-        public (bool Success, string Error, MachineKey Result) GetMachineKey()
+        public Result<MachineKey> GetMachineKey()
         {
             try
             {
                 var (success, error, machineGuid) = MachineGuidReader.GetMachineGuid();
                 if (!success)
-                    return (false, error, default);
+                    return Fail<MachineKey>(error);
                 success = Guid.TryParse(machineGuid.Value, out Guid guid);
                 if (!success)
-                    return (false, $"Unable to parse machine guid: {machineGuid.Value}", default);
-                return (true, default, new MachineKey { Value = guid.ToByteArray() });
+                    return Fail<MachineKey>(new InvalidCastException());
+                return Succeed(new MachineKey { Value = guid.ToByteArray() });
             }
             catch (Exception exn)
             {
-                return (false, exn.Message, default);
+                return Fail<MachineKey>(exn);
             }
         }
-    }*/
+    }
 }

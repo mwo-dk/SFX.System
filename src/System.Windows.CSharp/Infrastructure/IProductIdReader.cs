@@ -2,7 +2,7 @@
 using SFX.System.Windows.CSharp.Model.Product;
 using SFX.Utils.Infrastructure;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Product
+namespace SFX.System.Infrastructure
 {
     /// <summary>
     /// Interface describing the capability of reading the Windows installation product ids.

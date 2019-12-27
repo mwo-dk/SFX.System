@@ -1,12 +1,11 @@
 ﻿using SFX.ROP.CSharp;
-using SFX.System.Windows.CSharp.Infrastructure.Registry;
 using SFX.System.Windows.CSharp.Model.Machine;
 using SFX.System.Windows.CSharp.Model.Registry;
 using System;
-using static System.Threading.Interlocked;
 using static SFX.ROP.CSharp.Library;
+using static System.Threading.Interlocked;
 
-namespace SFX.System.Windows.CSharp.Infrastructure.Machine
+namespace SFX.System.Infrastructure
 {
     /// <summary>
     /// Implements <see cref="IMachineGuidReader"/>
@@ -62,7 +61,7 @@ namespace SFX.System.Windows.CSharp.Infrastructure.Machine
                 throw new InvalidOperationException("MachineGuidReader is not initialized");
 
             var (success, error, result) = RegistryReader
-                .ReadSLocalMachineStringValue(Path, MachineGuidKeyName);
+                .ReadLocalMachineStringValue(Path, MachineGuidKeyName);
 
             return success ?
                 Succeed(new MachineGuid { Value = result.Value }) :
