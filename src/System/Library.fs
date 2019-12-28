@@ -1,4 +1,4 @@
-﻿namespace SFX.System
+﻿module SFX.System
 
 open SFX.ROP
 open SFX.System.Infrastructure

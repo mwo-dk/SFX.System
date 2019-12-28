@@ -1,4 +1,4 @@
-﻿namespace System.Windows
+﻿module SFX.System.Windows
 
 open SFX.ROP
 open SFX.System.Infrastructure
