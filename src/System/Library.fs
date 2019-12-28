@@ -16,18 +16,38 @@ module Base64 =
 module IO =
     let private service = FileSystemService()
 
-    let folderExists folder = service.FolderExists(folder) |> toResult
+    type FilePath = {Value: string}
+    let createFilePath x = {Value = x}
+    let private fromFilePath (x: SFX.System.Model.FilePath) =
+        {Value = x.Value}
+    let private toFilePath x = 
+        let result = SFX.System.Model.FilePath()
+        result.Value <- x.Value
+        result
+    type FolderPath = {Value: string}
+    let createFolderPath x = {Value = x}
+    let private fromFolderPath (x: SFX.System.Model.FolderPath) =
+        {Value = x.Value}
+    let private toFolderPath x = 
+        let result = SFX.System.Model.FolderPath()
+        result.Value <- x.Value
+        result
+
+    let folderExists folder = service.FolderExists(folder |> toFolderPath) |> toResult
     let createRolder folder = 
-        match service.CreateFolder(folder) |> toResult with
+        match service.CreateFolder(folder |> toFolderPath) |> toResult with
         | Success _ -> () |> succeed
         | Failure exn -> exn |> fail
     let clearFolder folder = 
-        match service.ClearFolder(folder) |> toResult with
+        match service.ClearFolder(folder |> toFolderPath) |> toResult with
         | Success _ -> () |> succeed
         | Failure exn -> exn |> fail
 
-    let fileExits file = service.FileExists(file) |> toResult
-    let getFiles folder = service.GetFiles(folder) |> toResult
+    let fileExits file = service.FileExists(file |> toFilePath) |> toResult
+    let getFiles folder = 
+        match service.GetFiles(folder |> toFolderPath) |> toResult with
+        | Success result -> result |> Seq.map fromFilePath |> succeed
+        | Failure exn -> exn |> fail
 
     type Content =
     | B of byte array
@@ -50,14 +70,14 @@ module IO =
         | Failure exn -> exn |> fail
 
     let deleteFile file =
-        match service.DeleteFile(file) |> toResult with
+        match service.DeleteFile(file |> toFilePath) |> toResult with
         | Success _ -> () |> succeed
         | Failure exn -> exn |> fail
 
-    let readBinaryContent file = service.ReadFileBinaryContent file |> toResult
-    let readStringContent file = service.ReadFileStringContent file |> toResult
-    let readBinaryContentAsync file = service.ReadFileBinaryContentAsync file |> Async.AwaitTask |> Async.RunSynchronously |> toResult
-    let readStringContentAsync file = service.ReadFileStringContentAsync file |> Async.AwaitTask |> Async.RunSynchronously |> toResult
+    let readBinaryContent file = service.ReadFileBinaryContent (file |> toFilePath) |> toResult
+    let readStringContent file = service.ReadFileStringContent (file |> toFilePath) |> toResult
+    let readBinaryContentAsync file = service.ReadFileBinaryContentAsync (file |> toFilePath) |> Async.AwaitTask |> Async.RunSynchronously |> toResult
+    let readStringContentAsync file = service.ReadFileStringContentAsync (file |> toFilePath) |> Async.AwaitTask |> Async.RunSynchronously |> toResult
 
 module SecureString =
 
