@@ -6,13 +6,22 @@ open SFX.System.Infrastructure
 module Encryption =
     let private service = EncryptionService(SecureStringService())
 
-    let encrypt x salt = service.Encrypt(x, salt) |> toResult
-    let encryptString x salt = service.EncryptString(x, salt) |> toResult
-    let encryptSecureString x salt = service.EncryptSecureString(x, salt) |> toResult
+    type Salt = {Value: byte array}
+    let createSalt x = {Value = x}
+    let private fromSalt (x: SFX.System.Model.Salt) =
+        {Value = x.Value}
+    let private toSalt x = 
+        let result = SFX.System.Model.Salt()
+        result.Value <- x.Value
+        result
 
-    let decrypt x salt = service.Decrypt(x, salt) |> toResult
-    let decryptString x salt = service.DecryptString(x, salt) |> toResult
-    let decryptSecureString x salt = service.DecryptSecureString(x, salt) |> toResult
+    let encrypt x salt = service.Encrypt(x, salt |> toSalt) |> toResult
+    let encryptString x salt = service.EncryptString(x, salt |> toSalt) |> toResult
+    let encryptSecureString x salt = service.EncryptSecureString(x, salt |> toSalt) |> toResult
+
+    let decrypt x salt = service.Decrypt(x, salt |> toSalt) |> toResult
+    let decryptString x salt = service.DecryptString(x, salt |> toSalt) |> toResult
+    let decryptSecureString x salt = service.DecryptSecureString(x, salt |> toSalt) |> toResult
 
 module Registry =
     let internal service = RegistryReader()
