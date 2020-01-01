@@ -61,7 +61,7 @@ namespace SFX.System.Infrastructure
             if (!IsInitialized())
                 throw new InvalidOperationException("ProductReader is not initialized");
 
-            var (success, error, result) = RegistryReader
+            var (success, result, error) = RegistryReader
                 .ReadLocalMachineStringValue(Path, ProductIdKeyName);
 
             return success ?
@@ -75,7 +75,7 @@ namespace SFX.System.Infrastructure
             if (!IsInitialized())
                 throw new InvalidOperationException("ProductReader is not initialized");
 
-            var (success, error, result) = RegistryReader
+            var (success, result, error) = RegistryReader
                 .ReadLocalMachineBlobValue(Path, DigitalProductIdKeyName);
 
             return success ?

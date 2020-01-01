@@ -81,7 +81,7 @@ namespace SFX.System.Infrastructure
             if (!salt.IsValid())
                 return Fail<byte[]>(new ArgumentException("Salt is not valid"));
 
-            var (success, error, str) =
+            var (success, str, error) =
                 SecureStringService.ToInsecureString(input);
             if (!success)
                 return Fail<byte[]>(error);
@@ -171,7 +171,7 @@ namespace SFX.System.Infrastructure
                         encryptedData,
                         salt.Value,
                         global::System.Security.Cryptography.DataProtectionScope.CurrentUser);
-                var (success, error, result) =
+                var (success, result, error) =
                     SecureStringService.ToSecureString(Encoding.Unicode.GetString(decryptedData));
                 if (!success)
                     return Fail<SecureString>(error);

@@ -178,7 +178,7 @@ namespace SFX.System.Infrastructure
         /// <inheritdoc/>
         public Result<byte[]> ReadFileBinaryContent(FilePath filePath)
         {
-            var (success, error, result) = FileExists(filePath);
+            var (success, result, error) = FileExists(filePath);
             if (!success)
                 return Fail<byte[]>(error);
             if (!result)
@@ -212,7 +212,7 @@ namespace SFX.System.Infrastructure
         /// <inheritdoc/>
         public Result<string> ReadFileStringContent(FilePath filePath)
         {
-            var (success, error, result) = FileExists(filePath);
+            var (success, result, error) = FileExists(filePath);
             if (!success)
                 return Fail<string>(error);
             if (!result)
@@ -233,7 +233,7 @@ namespace SFX.System.Infrastructure
         /// <inheritdoc/>
         public async Task<Result<byte[]>> ReadFileBinaryContentAsync(FilePath filePath)
         {
-            var (success, error, result) = FileExists(filePath);
+            var (success, result, error) = FileExists(filePath);
             if (!success)
                 return Fail<byte[]>(error);
             if (!result)
@@ -267,7 +267,7 @@ namespace SFX.System.Infrastructure
         /// <inheritdoc/>
         public async Task<Result<string>> ReadFileStringContentAsync(FilePath filePath)
         {
-            var (success, error, result) = FileExists(filePath);
+            var (success, result, error) = FileExists(filePath);
             if (!success)
                 return Fail<string>(error);
             if (!result)

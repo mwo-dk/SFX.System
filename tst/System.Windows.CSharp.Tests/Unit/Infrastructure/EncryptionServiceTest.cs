@@ -67,7 +67,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.Encrypt(null, _salt);
+            var (success, result, error) = sut.Encrypt(null, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -83,7 +83,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.Encrypt(data, new Salt());
+            var (success, result, error) = sut.Encrypt(data, new Salt());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -99,7 +99,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.Decrypt(null, _salt);
+            var (success, result, error) = sut.Decrypt(null, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -113,7 +113,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.Decrypt(new byte[] { }, _salt);
+            var (success, result, error) = sut.Decrypt(new byte[] { }, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -126,9 +126,9 @@ namespace SFX.System.Test.Unit.Infrastructure
             var message = "Hello world";
             var secureStringService = new SecureStringService();
             var sut = new EncryptionService(secureStringService);
-            var (_, _, str_) = sut.EncryptString(message, _salt);
+            var (_, str_, _) = sut.EncryptString(message, _salt);
 
-            var (success, error, result) = sut.Decrypt(str_, new Salt());
+            var (success, result, error) = sut.Decrypt(str_, new Salt());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -144,7 +144,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.EncryptString(null, _salt);
+            var (success, result, error) = sut.EncryptString(null, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -159,7 +159,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.EncryptString(message, new Salt());
+            var (success, result, error) = sut.EncryptString(message, new Salt());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -175,7 +175,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.DecryptString(null, _salt);
+            var (success, result, error) = sut.DecryptString(null, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -189,7 +189,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.DecryptString(new byte[] { }, _salt);
+            var (success, result, error) = sut.DecryptString(new byte[] { }, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -203,9 +203,9 @@ namespace SFX.System.Test.Unit.Infrastructure
             var message = "Hello world";
             var secureStringService = new SecureStringService();
             var sut = new EncryptionService(secureStringService);
-            var (_, _, str_) = sut.EncryptString(message, _salt);
+            var (_, str_, _) = sut.EncryptString(message, _salt);
 
-            var (success, error, result) = sut.DecryptString(str_, new Salt());
+            var (success, result, error) = sut.DecryptString(str_, new Salt());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -221,7 +221,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.EncryptSecureString(null, _salt);
+            var (success, result, error) = sut.EncryptSecureString(null, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -234,10 +234,10 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var message = "Hello world";
             var secureStringService = new SecureStringService();
-            var (_, _, str) = secureStringService.ToSecureString(message);
+            var (_, str, _) = secureStringService.ToSecureString(message);
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.EncryptSecureString(str, new Salt());
+            var (success, result, error) = sut.EncryptSecureString(str, new Salt());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -250,14 +250,14 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var message = "Hello world";
             var _secureStringService = new SecureStringService();
-            var (_, _, str) = _secureStringService.ToSecureString(message);
+            var (_, str, _) = _secureStringService.ToSecureString(message);
             var secureStringService = Fake<ISecureStringService>();
             var error = new Exception(_fixture.Create<string>());
             CallTo(() => secureStringService.ToInsecureString(str))
                 .Returns(Fail<string>(error));
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error_, result) = sut.EncryptSecureString(str, _salt);
+            var (success, result, error_) = sut.EncryptSecureString(str, _salt);
 
             Assert.False(success);
             Assert.Same(error, error_);
@@ -272,7 +272,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.DecryptSecureString(null, _salt);
+            var (success, result, error) = sut.DecryptSecureString(null, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -286,7 +286,7 @@ namespace SFX.System.Test.Unit.Infrastructure
             var secureStringService = Fake<ISecureStringService>();
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error, result) = sut.DecryptSecureString(new byte[] { }, _salt);
+            var (success, result, error) = sut.DecryptSecureString(new byte[] { }, _salt);
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -299,11 +299,11 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var message = "Hello world";
             var secureStringService = new SecureStringService();
-            var (_, _, str) = secureStringService.ToSecureString(message);
+            var (_, str, _) = secureStringService.ToSecureString(message);
             var sut = new EncryptionService(secureStringService);
-            var (_, _, str_) = sut.EncryptSecureString(str, _salt);
+            var (_, str_, _) = sut.EncryptSecureString(str, _salt);
 
-            var (success, error, result) = sut.DecryptSecureString(str_, new Salt());
+            var (success, result, error) = sut.DecryptSecureString(str_, new Salt());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -316,8 +316,8 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var message = "Hello world";
             var _secureStringService = new SecureStringService();
-            var (_, _, str) = _secureStringService.ToSecureString(message);
-            var (_, _, data) = (new EncryptionService(_secureStringService))
+            var (_, str, _) = _secureStringService.ToSecureString(message);
+            var (_, data, _) = (new EncryptionService(_secureStringService))
                 .EncryptSecureString(str, _salt);
             var secureStringService = Fake<ISecureStringService>();
             var error = new Exception(_fixture.Create<string>());
@@ -325,7 +325,7 @@ namespace SFX.System.Test.Unit.Infrastructure
                 .Returns(Fail<SecureString>(error));
             var sut = new EncryptionService(secureStringService);
 
-            var (success, error_, result) = sut.DecryptSecureString(data, _salt);
+            var (success, result, error_) = sut.DecryptSecureString(data, _salt);
 
             Assert.False(success);
             Assert.Same(error, error_);

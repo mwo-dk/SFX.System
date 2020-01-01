@@ -23,7 +23,7 @@ namespace SFX.System.Infrastructure
         {
             try
             {
-                var (success, error, machineGuid) = MachineGuidReader.GetMachineGuid();
+                var (success, machineGuid, error) = MachineGuidReader.GetMachineGuid();
                 if (!success)
                     return Fail<MachineKey>(error);
                 success = Guid.TryParse(machineGuid.Value, out Guid guid);
