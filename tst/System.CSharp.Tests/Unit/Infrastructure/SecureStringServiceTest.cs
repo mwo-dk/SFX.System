@@ -13,7 +13,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new SecureStringService();
 
-            var (success, error, result) = sut.ToSecureString(null);
+            var (success, result, error) = sut.ToSecureString(null);
 
             Assert.False(success);
             Assert.IsAssignableFrom<ArgumentNullException>(error);
@@ -25,7 +25,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new SecureStringService();
 
-            var (success, error, result) = sut.ToSecureString("Hello world");
+            var (success, result, error) = sut.ToSecureString("Hello world");
 
             Assert.True(success);
             Assert.Null(error);
@@ -39,7 +39,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new SecureStringService();
 
-            var (success, error, result) = sut.ToInsecureString(null);
+            var (success, result, error) = sut.ToInsecureString(null);
 
             Assert.False(success);
             Assert.IsAssignableFrom<ArgumentNullException>(error);
@@ -51,8 +51,8 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new SecureStringService();
 
-            var (_, _, secureString) = sut.ToSecureString("Hello world");
-            var (success, error, result) = sut.ToInsecureString(secureString);
+            var (_, secureString, _) = sut.ToSecureString("Hello world");
+            var (success, result, error) = sut.ToInsecureString(secureString);
 
             Assert.True(success);
             Assert.Null(error);

@@ -36,7 +36,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         {
             var sut = new FileSystemService();
 
-            var (success, error, result) = sut.FolderExists(GetRandomFolder());
+            var (success, result, error) = sut.FolderExists(GetRandomFolder());
 
             Assert.True(success);
             Assert.Null(error);
@@ -50,7 +50,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             var folder = GetRandomFolder();
             CreateFolder(folder.Value);
 
-            var (success, error, result) = sut.FolderExists(folder);
+            var (success, result, error) = sut.FolderExists(folder);
 
             Assert.True(success);
             Assert.Null(error);
@@ -111,7 +111,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
         {
             var sut = new FileSystemService();
 
-            var (success, error, result) = sut.FileExists(new FilePath { Value = Path.Combine(WorkingFolder, _fixture.Create<string>()) });
+            var (success, result, error) = sut.FileExists(new FilePath { Value = Path.Combine(WorkingFolder, _fixture.Create<string>()) });
 
             Assert.True(success);
             Assert.Null(error);
@@ -125,7 +125,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             var sut = new FileSystemService();
             CreateFile(fileName, _fixture.Create<string>());
 
-            var (success, error, result) = sut.FileExists(new FilePath { Value = fileName });
+            var (success, result, error) = sut.FileExists(new FilePath { Value = fileName });
 
             Assert.True(success);
             Assert.Null(error);
@@ -145,7 +145,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             foreach (var filePath in filePaths)
                 CreateFile(filePath.Value, _fixture.Create<string>());
 
-            var (success, error, files_) = sut.GetFiles(new FolderPath { Value = WorkingFolder });
+            var (success, files_, error) = sut.GetFiles(new FolderPath { Value = WorkingFolder });
 
             Assert.True(success);
             Assert.Null(error);
@@ -186,7 +186,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
             sut.CreateFile(new FilePath { Value = fileName }, fileContent);
             sut.DeleteFile(new FilePath { Value = fileName });
 
-            var (ok, error, result) = sut.FileExists(new FilePath { Value = fileName });
+            var (ok, result, error) = sut.FileExists(new FilePath { Value = fileName });
             Assert.True(ok);
             Assert.Null(error);
             Assert.False(result);
@@ -204,7 +204,7 @@ namespace SFX.System.Test.SystemIntegration.Infrastructure
 
             sut.CreateFile(new FilePath { Value = fileName }, fileContent);
 
-            var (success, error, content) = sut.ReadFileStringContent(new FilePath { Value = fileName });
+            var (success, content, error) = sut.ReadFileStringContent(new FilePath { Value = fileName });
 
             Assert.True(success);
             Assert.Null(error);

@@ -32,7 +32,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new Base64Service();
 
-            var (success, error, result) = sut.ToBase64String(null);
+            var (success, result, error) = sut.ToBase64String(null);
 
             Assert.False(success);
             Assert.IsAssignableFrom<ArgumentNullException>(error);
@@ -44,7 +44,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new Base64Service();
 
-            var (success, error, result) = sut.ToBase64String(_data);
+            var (success, result, error) = sut.ToBase64String(_data);
 
             Assert.True(success);
             Assert.Null(error);
@@ -58,7 +58,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new Base64Service();
 
-            var (success, error, result) = sut.FromBase64String(null);
+            var (success, result, error) = sut.FromBase64String(null);
 
             Assert.False(success);
             Assert.IsAssignableFrom<ArgumentNullException>(error);
@@ -70,7 +70,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new Base64Service();
 
-            var (success, error, result) = sut.FromBase64String("");
+            var (success, result, error) = sut.FromBase64String("");
 
             Assert.False(success);
             Assert.IsAssignableFrom<ArgumentNullException>(error);
@@ -82,7 +82,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new Base64Service();
 
-            var (success, error, result) = sut.FromBase64String(_fixture.Create<string>());
+            var (success, result, error) = sut.FromBase64String(_fixture.Create<string>());
 
             Assert.False(success);
             Assert.NotNull(error);
@@ -94,7 +94,7 @@ namespace SFX.System.Test.Unit.Infrastructure
         {
             var sut = new Base64Service();
 
-            var (success, error, result) = sut.FromBase64String(_encodedData);
+            var (success, result, error) = sut.FromBase64String(_encodedData);
 
             Assert.True(success);
             Assert.Null(error);

@@ -60,7 +60,7 @@ namespace SFX.System.Infrastructure
             if (!IsInitialized())
                 throw new InvalidOperationException("MachineGuidReader is not initialized");
 
-            var (success, error, result) = RegistryReader
+            var (success, result, error) = RegistryReader
                 .ReadLocalMachineStringValue(Path, MachineGuidKeyName);
 
             return success ?
